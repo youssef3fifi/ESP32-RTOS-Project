@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Arduino CLI
       uses: arduino/setup-arduino-cli@v2
@@ -30,6 +30,6 @@ jobs:
 
     - name: Compile ESP32 Sketch
       run: |
-        mkdir -p ESP32_Build
-        cp *.ino ESP32_Build/
-        arduino-cli compile --fqbn esp32:esp32:esp32 ESP32_Build
+        mkdir -p RTOS_Project
+        cp *.ino RTOS_Project/RTOS_Project.ino
+        arduino-cli compile --fqbn esp32:esp32:esp32 RTOS_Project

@@ -1,0 +1,35 @@
+name: ESP32 CI Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup Arduino CLI
+      uses: arduino/setup-arduino-cli@v2
+
+    - name: Install ESP32 Core
+      run: |
+        arduino-cli core update-index --additional-urls https://dl.espressif.com/dl/package_esp32_index.json
+        arduino-cli core install esp32:esp32 --additional-urls https://dl.espressif.com/dl/package_esp32_index.json
+
+    - name: Install Required Libraries
+      run: |
+        arduino-cli lib install "Adafruit BME280 Library"
+        arduino-cli lib install "Adafruit Unified Sensor"
+        arduino-cli lib install "LiquidCrystal I2C"
+
+    - name: Compile ESP32 Sketch
+      run: |
+        mkdir -p ESP32_Build
+        cp *.ino ESP32_Build/
+        arduino-cli compile --fqbn esp32:esp32:esp32 ESP32_Build
